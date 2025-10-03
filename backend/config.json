@@ -1,0 +1,16 @@
+{
+  "db_clients": {},
+  "redis_clients": {},
+  "listeners": [
+    {
+      "address": "0.0.0.0",
+      "port": 80,
+      "ssl": true
+    }
+  ],
+  "thread_num": 0,
+  "log": {
+    "log_path": "./",
+    "log_level": "INFO"
+  }
+}

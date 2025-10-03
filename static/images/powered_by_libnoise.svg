@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="40" viewBox="0 0 100 40">
+  <style>
+    text {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      fill: #333;
+    }
+    .powered-by {
+      font-size: 12px;
+    }
+    .libnoise {
+      font-weight: bold;
+    }
+  </style>
+  
+  <text x="0" y="15" class="powered-by">powered by</text>
+  <text x="20" y="35" class="libnoise">libnoise</text>
+</svg>

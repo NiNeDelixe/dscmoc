@@ -1,0 +1,78 @@
+<div class="row">
+	<div class="col-md-8">
+		<div class="card mb-4">
+			<div class="card-body text-center">
+				<div id="previewContainer" 
+					 class="border border-3 border-primary position-relative d-inline-block">
+					<div id="sizePreview" 
+						 class="border border-2 border-dashed border-info position-absolute top-0 start-0 bg-light bg-opacity-25">
+					</div>
+					<div id="imageContainer" class="noise-container position-relative">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-4">
+		<div class="card">
+			<div class="card-header bg-primary text-white">
+				<h5 class="mb-0">Параметры шума</h5>
+			</div>
+			<div class="card-body">
+				<form id="noiseParams">
+					<!-- Размер шума -->
+					<div class="mb-3">
+						<label for="noiseSize" class="form-label">
+							Размер шума: <span id="noiseSizeValue">500</span>
+						</label>
+						<input type="range" class="form-range" id="noiseSize" min="20" max="1000" value="500" step="1"/>
+					</div>
+
+					<!-- Положение X -->
+					<div class="mb-3">
+						<label for="offsetX" class="form-label">
+							Смещение X: <span id="offsetXValue">0</span>
+						</label>
+						<input type="range" class="form-range" id="offsetX" min="-1000" max="1000" value="0" step="1"/>
+					</div>
+
+					<!-- Положение Y -->
+					<div class="mb-3">
+						<label for="offsetY" class="form-label">
+							Смещение Y: <span id="offsetYValue">0</span>
+						</label>
+						<input type="range" class="form-range" id="offsetY" min="-1000" max="1000" value="0" step="1"/>
+					</div>
+
+					<!-- Октавы -->
+					<div class="mb-3">
+						<label for="octaves" class="form-label">
+							Октавы: <span id="octavesValue">4</span>
+						</label>
+						<input type="range" class="form-range" id="octaves" min="1" max="8" value="4" step="1"/>
+					</div>
+
+					<!-- Частота -->
+					<div class="mb-3">
+						<label for="frequency" class="form-label">
+							Частота: <span id="frequencyValue">0.05</span>
+						</label>
+						<input type="range" class="form-range" id="frequency" min="0.01" max="0.2" value="0.05" step="0.01"/>
+					</div>
+
+					<!-- Persistence -->
+					<div class="mb-3">
+						<label for="persistence" class="form-label">
+							Persistence: <span id="persistenceValue">0.5</span>
+						</label>
+						<input type="range" class="form-range" id="persistence" min="0.1" max="1.0" value="0.5" step="0.05"/>
+					</div>
+
+					<button type="button" id="generateBtn" class="btn btn-primary w-100">Сгенерировать шум</button>
+					<button type="button" id="saveBtn" class="btn btn-outline-secondary w-100 mt-2">Сохранить изображение</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

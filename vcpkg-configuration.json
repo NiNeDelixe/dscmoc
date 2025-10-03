@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg-configuration.schema.json",
+  "default-registry": {
+    "kind": "git",
+    "repository": "https://github.com/Microsoft/vcpkg",
+    "baseline": "9c5c2a0ab75aff5bcd08142525f6ff7f6f7ddeee"
+  },
+  "registries": [
+    {
+      "kind": "git",
+      "repository": "https://github.com/MicrosoftDocs/vcpkg-docs",
+      "reference": "vcpkg-registry",
+      "baseline": "768f6a3ad9f9b6c4c2ff390137690cf26e3c3453",
+      "packages": [ "beicode", "beison" ]
+    }
+  ]
+}

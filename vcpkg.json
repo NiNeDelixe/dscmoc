@@ -1,0 +1,11 @@
+{
+  "name": "dscmoc",
+  "version": "0.0.1",
+  "dependencies": [
+    {
+      "name": "drogon",
+      "features": [ "ctl" ]
+    },
+    "libnoise"
+  ]
+}

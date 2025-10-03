@@ -1,0 +1,18 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP}'
+    ports:
+      - "8080:80"
+    volumes:
+      - '.:/var/www/html'
+    stdin_open: true
+    networks:
+      - sail
+
+networks:
+  sail:
+      driver: bridge

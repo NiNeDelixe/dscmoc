@@ -1,0 +1,17 @@
+{
+  "db_clients": {},
+  "redis_clients": {},
+  "client_encoding": "utf8mb4",
+  "listeners": [
+    {
+      "address": "0.0.0.0",
+      "port": 85,
+      "ssl": false
+    }
+  ],
+  "thread_num": 0,
+  "log": {
+    "log_path": "./",
+    "log_level": "TRACE"
+  }
+}
