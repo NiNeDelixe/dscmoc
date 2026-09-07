@@ -27,8 +27,8 @@ foreach(cspFile ${SCP_LIST})
   set(VIEWSRC ${VIEWSRC} ${classname}.cc)
 endforeach()
 
-add_subdirectory("noise_generator")
-add_subdirectory("home_site")
+add_subdirectory("NoiseGenerator")
+add_subdirectory("HomeSite")
 
 add_executable(${PROJECT_NAME} main.cpp "CoreDefines.hpp" ${VIEWSRC} ${NOISE_SITE_SOURCES} ${HOME_SITE_SOURCES})
 
