@@ -78,8 +78,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function saveImage() {
         const image = document.getElementById('noiseImage');
         const link = document.createElement('a');
-        link.download = 'noise.bmp';
-        //link.href = image.toDataURL('image/bmp');
+        
+        link.download = "noise_image.bmp";
+
+        link.href = image.src;
+
         link.click();
     }
 });

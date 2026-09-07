@@ -1,9 +1,3 @@
 [submodule "thirdparty/dotenv-cpp"]
 	path = thirdparty/dotenv-cpp
 	url = https://github.com/laserpants/dotenv-cpp
-[submodule "backend/home_site"]
-	path = backend/home_site
-	url = https://github.com/NiNeDelixe/home-site
-[submodule "backend/noise_generator"]
-	path = backend/noise_generator
-	url = https://github.com/NiNeDelixe/noise-generator
