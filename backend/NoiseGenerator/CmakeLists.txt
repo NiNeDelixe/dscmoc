@@ -1,0 +1,13 @@
+set(CONTROLLERS_SOURCES
+	"NoiseGenerator/controllers/NoisePageController.cpp"
+	"NoiseGenerator/controllers/NoisePageController.hpp"
+)
+
+set(NOISE_SOURCES
+	"NoiseGenerator/noise/NoiseMaker.cpp"
+	"NoiseGenerator/noise/NoiseMaker.hpp"
+	"NoiseGenerator/noise/NoiseRender.cpp"
+	"NoiseGenerator/noise/NoiseRender.hpp"
+)
+
+set(NOISE_SITE_SOURCES ${CONTROLLERS_SOURCES} ${NOISE_SOURCES} PARENT_SCOPE)

@@ -1,0 +1,6 @@
+set(CONTROLLERS_SOURCES
+	"HomeSite/controllers/HomeController.cpp"
+	"HomeSite/controllers/HomeController.hpp"
+)
+
+set(HOME_SITE_SOURCES ${CONTROLLERS_SOURCES} PARENT_SCOPE)
