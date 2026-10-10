@@ -2,6 +2,7 @@ project(backend)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 find_package(Threads REQUIRED)
 find_package(Drogon CONFIG REQUIRED)
 find_package(unofficial-noise CONFIG REQUIRED)
@@ -14,7 +15,16 @@ find_program(DROGON_CTL_EXECUTABLE
 )
 message(STATUS "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools/drogon")
 
-FILE(GLOB SCP_LIST ${CMAKE_SOURCE_DIR}/views/*.csp ${CMAKE_SOURCE_DIR}/views/*.html)
+
+add_executable(${PROJECT_NAME} main.cpp "CoreDefines.hpp")
+
+create_resource_links(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/static")
+
+add_subdirectory("NoiseGenerator")
+add_subdirectory("HomeSite")
+add_subdirectory("MCTools")
+
+FILE(GLOB SCP_LIST ${CMAKE_CURRENT_SOURCE_DIR}/NoiseGenerator/views/*.html ${CMAKE_CURRENT_SOURCE_DIR}/HomeSite/views/*.html  ${CMAKE_CURRENT_SOURCE_DIR}/MCTools/views/*.html)
 foreach(cspFile ${SCP_LIST})
   message(STATUS "cspFile:" ${cspFile})
   get_filename_component(classname ${cspFile} NAME_WE)
@@ -27,10 +37,7 @@ foreach(cspFile ${SCP_LIST})
   set(VIEWSRC ${VIEWSRC} ${classname}.cc)
 endforeach()
 
-add_subdirectory("NoiseGenerator")
-add_subdirectory("HomeSite")
-
-add_executable(${PROJECT_NAME} main.cpp "CoreDefines.hpp" ${VIEWSRC} ${NOISE_SITE_SOURCES} ${HOME_SITE_SOURCES})
+target_sources(${PROJECT_NAME} PRIVATE ${VIEWSRC} ${NOISE_SITE_SOURCES} ${HOME_SITE_SOURCES} ${MCTOOLS_SOURCES})
 
 target_link_libraries(${PROJECT_NAME} 
     PRIVATE 
@@ -40,28 +47,8 @@ target_link_libraries(${PROJECT_NAME}
         unofficial::noiseutils::noiseutils
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_SOURCE_DIR}/noise_generator")
+target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_SOURCE_DIR}/NoiseGenerator")
 target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_SOURCE_DIR}")
-
-if(WIN32)
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND cmd.exe /C if not exist "views" (mklink /D /J \"${CMAKE_CURRENT_BINARY_DIR}/views\" \"${CMAKE_SOURCE_DIR}/views\")
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND cmd.exe /C if not exist "static" (mklink /D /J \"${CMAKE_CURRENT_BINARY_DIR}/static\" \"${CMAKE_SOURCE_DIR}/static\")
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
-else()
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ln -sf "${CMAKE_SOURCE_DIR}/views" "views"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ln -sf "${CMAKE_SOURCE_DIR}/viestaticws" "static"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
-endif()
 
 
 

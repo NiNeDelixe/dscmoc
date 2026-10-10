@@ -5,6 +5,7 @@
 #define BACKEND_NAMESPACE backend
 #define HOMESITE_NAMESPACE home
 #define NOISEGENERATOR_NAMSEPACE noise_gen
+#define MCTOOLS_NAMESPACE mctools
 
 #ifdef LUNUX
 

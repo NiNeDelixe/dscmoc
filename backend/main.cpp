@@ -8,7 +8,8 @@ int main()
 
 	drogon::app().registerBeginningAdvice([]()
 		{
-			LOG_INFO << "Server is started in: http://" << drogon::app().getListeners().at(0).toIpPort();
+			LOG_INFO << "Server is started in: http://" << drogon::app().getListeners().at(0).toIpPort() 
+				<< " or http://localhost:" << drogon::app().getListeners().at(0).toPort();
 		});
 
 	drogon::app()

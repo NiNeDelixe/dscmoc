@@ -1,0 +1,8 @@
+set(CONTROLLERS_SOURCES
+	"MCTools/controllers/MCToolsController.cpp"
+)
+
+
+set(MCTOOLS_SOURCES ${CONTROLLERS_SOURCES} PARENT_SCOPE)
+
+create_resource_links(${PROJECT_NAME} views)
