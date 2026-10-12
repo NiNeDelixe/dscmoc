@@ -4,8 +4,9 @@
   "dependencies": [
     {
       "name": "drogon",
-      "features": [ "ctl" ]
+      "features": [ "ctl", "sqlite3", "orm" ]
     },
-    "libnoise"
+    "libnoise",
+    "7zip"
   ]
 }

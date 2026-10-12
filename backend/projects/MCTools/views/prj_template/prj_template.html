@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+
+<%c++
+    auto para=@@.get<std::unordered_map<std::string, std::string, utils::internal::SafeStringHash>>("parameters");
+%>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>MCTools - [[ title ]]</title>
+    <link rel="stylesheet" href="/static/css/mctools.css">
+    <script src="/static/js/mctools.js" defer></script>
+</head>
+
+<body data-page="templates">
+    <div id="site-header"><%view header %></div>
+    <main class="container page-main">
+        <section class="section">
+            <div class="section-heading">
+                <div>
+                    <h1>Конструктор модпака</h1>
+                    <p><!-- BACKEND: описание конструктора --></p>
+                </div>
+            </div>
+            <div class="workspace">
+                <aside class="card step-list">
+                    <button class="step active" data-step="0">1 Тематики</button>
+                    <button class="step" data-step="1">2 Загрузчик модов</button>
+                    <button class="step" data-step="2">3 Версия Minecraft</button>
+                    <button class="step" data-step="3">4 Выбор модов</button>
+                    <button class="step" data-step="4">5 Экспорт</button>
+                </aside>
+                <section class="card wizard-panel" aria-live="polite">
+                    <%view theme_stage %>
+                    <%view loader_stage %>
+                    <%view mc_version_stage %>
+                    <%view mod_list_stage %>
+                    <%view export_stage %>
+                    <div class="wizard-footer">
+                        <button class="button secondary" id="prev-step" disabled>Назад</button>
+                        <button class="button" id="next-step">Далее</button>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+    <div id="site-footer"><%view footer %></div>
+</body>
+
+</html>

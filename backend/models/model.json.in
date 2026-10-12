@@ -1,0 +1,103 @@
+{
+    "rdbms": "sqlite3",
+    "filename":"@DB_FILE@",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dbname": "realworld",
+    "schema": "public",
+    "user": "test",
+    "passwd": "",
+    "tables": ["Users","follows", "Comments", "Articles", "ArticleFavorites"],
+    "relationships": {
+        "enabled": false,
+        "items": [
+            {
+                "type": "has many",
+                "original_table_name": "users",
+                "original_table_alias": "user",
+                "original_key": "id",
+                "target_table_name": "comments",
+                "target_table_alias": "",
+                "target_key": "user_id",
+                "enable_reverse": true
+            },
+            {
+                "type": "has many",
+                "original_table_name": "users",
+                "original_table_alias": "user",
+                "original_key": "id",
+                "target_table_name": "articles",
+                "target_table_alias": "",
+                "target_key": "user_id",
+                "enable_reverse": true
+            },
+            {
+                "type": "has many",
+                "original_table_name": "articles",
+                "original_table_alias": "article",
+                "original_key": "id",
+                "target_table_name": "comments",
+                "target_table_alias": "",
+                "target_key": "article_id",
+                "enable_reverse": true
+            },
+            {
+                "type": "many to many",
+                "original_table_name": "users",
+                "original_table_alias": "",
+                "original_key": "id",
+                "pivot_table": {
+                    "table_name": "follows",
+                    "original_key": "user_id",
+                    "target_key": "follow_id"
+                },
+                "target_table_name": "users",
+                "target_table_alias": "",
+                "target_key": "id",
+                "enable_reverse": true
+            },
+            {
+                "type": "many to many",
+                "original_table_name": "articles",
+                "original_table_alias": "",
+                "original_key": "id",
+                "pivot_table": {
+                    "table_name": "article_favorites",
+                    "original_key": "article_id",
+                    "target_key": "user_id"
+                },
+                "target_table_name": "users",
+                "target_table_alias": "",
+                "target_key": "id",
+                "enable_reverse": true
+            },
+            {
+                "type": "many to many",
+                "original_table_name": "articles",
+                "original_table_alias": "",
+                "original_key": "id",
+                "pivot_table": {
+                    "table_name": "article_tags",
+                    "original_key": "article_id",
+                    "target_key": "tag_id"
+                },
+                "target_table_name": "tags",
+                "target_table_alias": "",
+                "target_key": "id",
+                "enable_reverse": true
+            }
+        ]
+    },
+    "restful_api_controllers": {
+        "enabled": false,
+        "resource_uri": "/*",
+        "class_name": "Restful*Ctrl",
+        "filters": [],
+        "db_client": {
+            "name": "default",
+            "is_fast": true
+        },
+        "directory": "controllers",
+        "generate_base_only": false
+    }
+}

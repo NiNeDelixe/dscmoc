@@ -1,0 +1,27 @@
+<div class="wizard-stage hidden" data-stage="4">
+    <h2>Экспорт сборки</h2>
+    <div class="download-options">
+        <label class="download-option">
+            <input type="radio" name="export_format" value="mods-zip" checked>ZIP со всеми модами</label>
+            <label class="download-option">
+                <input type="radio" name="export_format" value="mrpack">Сгенерированный .mrpack</label>
+                <label class="download-option">
+                    <input type="radio" name="export_format" value="pakku-project">ZIP проекта Pakku</label>
+    </div>
+    <div class="two-columns">
+        <div class="field">
+            <label for="instructions">Инструкции</label>
+            <select id="instructions" data-populate="instructions">
+                <option value="">Выберите инструкцию</option>
+                <!-- BACKEND: варианты -->
+            </select>
+        </div>
+        <div class="field">
+            <label for="java-args">Аргументы Java</label>
+            <input id="java-args" name="java_args"></div>
+    </div>
+    <div class="placeholder" id="instruction-content" data-populate="instruction-content">
+        <!-- BACKEND: текст инструкции -->
+    </div>
+    <button class="button" id="download-button" type="button">Сформировать сборку</button>
+</div>

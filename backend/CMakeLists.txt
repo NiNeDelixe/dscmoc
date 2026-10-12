@@ -13,31 +13,40 @@ find_program(DROGON_CTL_EXECUTABLE
     PATHS "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools/drogon"
     NO_DEFAULT_PATH
 )
-message(STATUS "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools/drogon")
+if(NOT EXISTS "${DROGON_CTL_EXECUTABLE}")
+    log(FATAL "DROGON_CTL_EXECUTABLE points to '${DROGON_CTL_EXECUTABLE}', but the file does not exist")
+endif()
+log(INFO "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools/drogon")
 
 
 add_executable(${PROJECT_NAME} main.cpp "CoreDefines.hpp")
 
 create_resource_links(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/static")
 
-add_subdirectory("NoiseGenerator")
-add_subdirectory("HomeSite")
-add_subdirectory("MCTools")
+add_subdirectory("projects/NoiseGenerator")
+list(TRANSFORM NOISE_SITE_SOURCES PREPEND "projects/")
+add_subdirectory("projects/HomeSite")
+list(TRANSFORM HOME_SITE_SOURCES PREPEND "projects/")
+add_subdirectory("projects/MCTools")
+list(TRANSFORM MCTOOLS_SOURCES PREPEND "projects/")
 
-FILE(GLOB SCP_LIST ${CMAKE_CURRENT_SOURCE_DIR}/NoiseGenerator/views/*.html ${CMAKE_CURRENT_SOURCE_DIR}/HomeSite/views/*.html  ${CMAKE_CURRENT_SOURCE_DIR}/MCTools/views/*.html)
+FILE(GLOB_RECURSE SCP_LIST ${CMAKE_CURRENT_SOURCE_DIR}/projects/NoiseGenerator/views/*.html ${CMAKE_CURRENT_SOURCE_DIR}/projects/HomeSite/views/*.html  ${CMAKE_CURRENT_SOURCE_DIR}/projects/MCTools/views/*.html)
 foreach(cspFile ${SCP_LIST})
-  message(STATUS "cspFile:" ${cspFile})
+  log(INFO "cspFile: " ${cspFile})
   get_filename_component(classname ${cspFile} NAME_WE)
-  message(STATUS "view classname:" ${classname})
+  log(INFO "view classname: " ${classname})
   add_custom_command(
     OUTPUT ${classname}.h ${classname}.cc
     COMMAND ${DROGON_CTL_EXECUTABLE} ARGS create view ${cspFile}
     DEPENDS ${cspFile}
     VERBATIM)
   set(VIEWSRC ${VIEWSRC} ${classname}.cc)
+  log(INFO "view source:" ${CMAKE_CURRENT_BINARY_DIR}/${classname}.cc)
 endforeach()
 
-target_sources(${PROJECT_NAME} PRIVATE ${VIEWSRC} ${NOISE_SITE_SOURCES} ${HOME_SITE_SOURCES} ${MCTOOLS_SOURCES})
+add_subdirectory(models)
+
+target_sources(${PROJECT_NAME} PRIVATE ${VIEWSRC} "${NOISE_SITE_SOURCES}" "${HOME_SITE_SOURCES}" "${MCTOOLS_SOURCES}")
 
 target_link_libraries(${PROJECT_NAME} 
     PRIVATE 
@@ -47,8 +56,12 @@ target_link_libraries(${PROJECT_NAME}
         unofficial::noiseutils::noiseutils
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_SOURCE_DIR}/NoiseGenerator")
-target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_SOURCE_DIR}")
+target_include_directories(
+  ${PROJECT_NAME} 
+    PRIVATE 
+      "${PROJECT_SOURCE_DIR}/projects/NoiseGenerator" 
+      "${PROJECT_SOURCE_DIR}"
+)
 
 
 

@@ -93,7 +93,7 @@ function(create_drogon_views OUT_VAR)
             set(views_dir "${CMAKE_SOURCE_DIR}/${dir}")
         endif()
 
-        file(GLOB view_files CONFIGURE_DEPENDS
+        file(GLOB_RECURSE view_files CONFIGURE_DEPENDS
             "${views_dir}/*.csp"
             "${views_dir}/*.html"
         )

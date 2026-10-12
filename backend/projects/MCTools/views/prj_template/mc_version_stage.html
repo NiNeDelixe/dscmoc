@@ -1,0 +1,25 @@
+<%c++
+    auto para=@@.get<std::unordered_map<std::string, std::string, utils::internal::SafeStringHash>>("parameters");
+%>
+
+<div class="wizard-stage hidden" data-stage="2">
+    <h2>Версия Minecraft</h2>
+    <div class="field">
+        <label for="mc-version">Версия Minecraft</label>
+        <select id="mc-version" name="minecraft_version" data-populate="minecraft-versions">
+            <%c++ if(para.size()>0){ %>
+                <%c++ for(auto iter:para){%>
+                    <option value="{%iter.first%}"><%c++ $$<<iter.second; %></option>
+                <%c++}%>
+            <%c++ }else{ %>
+                <option value="0">no parameter</option>
+            <%c++ } %>
+        </select>
+    </div>
+    <div class="field">
+        <label for="loader-version">Версия загрузчика</label>
+        <select id="loader-version" name="loader_version" data-populate="loader-versions">
+            <option value="">Автоматический выбор / значение backend</option>
+        </select>
+    </div>
+</div>

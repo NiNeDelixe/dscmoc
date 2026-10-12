@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>MCTools</title>
+    <link rel="stylesheet" href="/static/css/mctools.css">
+    <script src="/static/js/mctools.js" defer></script>
+</head>
+
+<body data-page="home">
+    <div id="site-header"><%view header %></div>
+    <main>
+        <section class="hero"><!-- HERO BACKGROUND: фоновое изображение задаётся в css/mctools.css, класс .hero -->
+            <div class="hero-shade"></div>
+            <div class="container hero-content">
+                <span class="eyebrow">MCTools</span>
+                <h1>Инструменты для сборки
+                    <br>модпаков 
+                    <span>Minecraft</span>
+                </h1>
+                <p><!-- BACKEND: описание главной страницы --></p>
+            </div>
+        </section>
+        <section class="container section">
+            <div class="section-heading">
+                <div>
+                    <h2>Основные инструменты</h2>
+                    <p><!-- BACKEND: описание раздела --></p>
+                </div>
+            </div>
+            <div class="tool-grid" id="tool-grid"></div>
+        </section>
+    </main>
+    <div id="site-footer"><%view footer %></div>
+</body>
+
+</html>

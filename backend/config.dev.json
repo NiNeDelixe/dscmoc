@@ -1,6 +1,4 @@
 {
-  "db_clients": {},
-  "redis_clients": {},
   "client_encoding": "utf8mb4",
   "listeners": [
     {
@@ -13,5 +11,15 @@
   "log": {
     "log_path": "./",
     "log_level": "TRACE"
-  }
+  },
+  "db_clients": [
+        {
+            "name": "default",
+            "rdbms": "sqlite3",
+            "host": "127.0.0.1",
+           "port": 5432,
+            "filename": "models/mydb.db",
+            "is_fast": false
+        }
+    ]
 }

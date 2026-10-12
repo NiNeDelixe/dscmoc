@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Готовые сборки — MCTools</title>
+    <link rel="stylesheet" href="/static/css/mctools.css">
+    <script src="/static/js/mctools.js" defer></script>
+</head>
+
+<body data-page="packs">
+    <div id="site-header"><%view header %></div>
+    <main class="container page-main">
+        <section class="section">
+            <h1>Готовые сборки</h1>
+            <p class="muted">
+                <!-- BACKEND: описание каталога -->
+            </p>
+            <div class="field filter-field"><label for="pack-filter">Фильтр</label><select id="pack-filter"
+                    data-populate="pack-filters">
+                    <option value="">Фильтры от backend</option>
+                </select></div>
+            <div class="tool-grid" id="ready-packs-list" data-populate="ready-packs">
+                <!-- BACKEND: карточки сборок -->
+            </div>
+        </section>
+    </main>
+    <div id="site-footer"><%view footer %></div>
+</body>
+
+</html>
