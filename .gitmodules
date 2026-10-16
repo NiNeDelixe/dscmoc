@@ -1,3 +1,6 @@
 [submodule "thirdparty/dotenv-cpp"]
 	path = thirdparty/dotenv-cpp
 	url = https://github.com/laserpants/dotenv-cpp
+[submodule "thirdparty/deluxe-lib"]
+	path = thirdparty/deluxe-lib
+	url = https://github.com/NiNeDelixe/deluxe-lib
