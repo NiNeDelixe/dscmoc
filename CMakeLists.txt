@@ -15,5 +15,6 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 
 set(BUILD_DOCS OFF)
 add_subdirectory("${CMAKE_SOURCE_DIR}/thirdparty/dotenv-cpp")
+add_subdirectory("${CMAKE_SOURCE_DIR}/thirdparty/deluxe-lib")
 	
 add_subdirectory("backend")

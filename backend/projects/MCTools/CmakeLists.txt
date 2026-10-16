@@ -1,8 +1,18 @@
 set(CONTROLLERS_SOURCES
 	"MCTools/controllers/MCToolsController.cpp"
+	"MCTools/controllers/PrjTemplateController.cpp"
 )
 
+set(LOGIC_SOURCES
+	"MCTools/logic/templates/MinecraftVersions.cpp"
+	"MCTools/logic/templates/LoadersHelper.cpp"
+)
 
-set(MCTOOLS_SOURCES ${CONTROLLERS_SOURCES} PARENT_SCOPE)
+set(ALL_SOURCES
+	${LOGIC_SOURCES}
+	${CONTROLLERS_SOURCES}
+)
+
+set(MCTOOLS_SOURCES ${ALL_SOURCES} PARENT_SCOPE)
 
 create_resource_links(${PROJECT_NAME} views)

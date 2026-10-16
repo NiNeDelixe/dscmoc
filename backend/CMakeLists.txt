@@ -7,6 +7,8 @@ find_package(Threads REQUIRED)
 find_package(Drogon CONFIG REQUIRED)
 find_package(unofficial-noise CONFIG REQUIRED)
 find_package(unofficial-noiseutils CONFIG REQUIRED)
+find_package(cpr CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
 
 find_program(DROGON_CTL_EXECUTABLE
     NAMES drogon_ctl
@@ -54,6 +56,9 @@ target_link_libraries(${PROJECT_NAME}
         dotenv
         unofficial::noise::noise
         unofficial::noiseutils::noiseutils
+        cpr::cpr
+        nlohmann_json::nlohmann_json
+        deluxe_lib::Core
 )
 
 target_include_directories(

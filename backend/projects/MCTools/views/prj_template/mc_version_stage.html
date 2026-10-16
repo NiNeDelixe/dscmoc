@@ -6,20 +6,21 @@
     <h2>Версия Minecraft</h2>
     <div class="field">
         <label for="mc-version">Версия Minecraft</label>
-        <select id="mc-version" name="minecraft_version" data-populate="minecraft-versions">
-            <%c++ if(para.size()>0){ %>
-                <%c++ for(auto iter:para){%>
-                    <option value="{%iter.first%}"><%c++ $$<<iter.second; %></option>
-                <%c++}%>
-            <%c++ }else{ %>
-                <option value="0">no parameter</option>
-            <%c++ } %>
+        <select id="mc-version" name="minecraft_version" data-populate="minecraft-versions" disabled>
+            <option value="">Сначала выберите загрузчик</option>
         </select>
     </div>
+    <p id="versionStatus" role="status"></p>
+
     <div class="field">
         <label for="loader-version">Версия загрузчика</label>
         <select id="loader-version" name="loader_version" data-populate="loader-versions">
-            <option value="">Автоматический выбор / значение backend</option>
+            <option value="">Автоматический выбор</option>
         </select>
     </div>
+    <label class="choice">
+        <input type="checkbox" id="stable-only" checked>
+        Только стабильные версии
+    </label>
+    <p id="loader-version-status" role="status"></p>
 </div>
