@@ -4,25 +4,29 @@
 
 #include "CoreDefines.hpp"
 
-#include <optional>
-
 #include <noise/noise.h>
 #include <noise/module/perlin.h>
 #include <noise/noiseutils.h>
-
-#include <drogon/drogon.h>
 
 namespace NOISEGENERATOR_NAMSEPACE
 {
 	struct NoiseData
 	{
-		size_t size;
-		size_t offset_x;
-		size_t offset_y;
-		size_t octaves;
+		int size;
+		int offset_x;
+		int offset_y;
+		int octaves;
 		float frequency;
 		float persistence;
 		long long t;
+
+		bool valid() const
+		{
+			return size >= 20 && size <= 1000 && octaves >= 1 && octaves <= 8
+				&& offset_x >= -1000 && offset_x <= 1000 && offset_y >= -1000 && offset_y <= 1000
+				&& frequency >= 0.01f && frequency <= 0.2f
+				&& persistence >= 0.1f && persistence <= 1.0f;
+		}
 	};
 
 	class NoiseMaker

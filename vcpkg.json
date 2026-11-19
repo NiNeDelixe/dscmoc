@@ -9,6 +9,10 @@
     "libnoise",
     "nlohmann-json",
     "cpr",
-    "pugixml"
+    "pugixml",
+    {
+      "name": "minizip",
+      "features": [ "unofficial-iowin32" ]
+    }
   ]
 }

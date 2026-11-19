@@ -1,88 +1,82 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const sliders = {
-        noiseSize: document.getElementById('noiseSize'),
-        offsetX: document.getElementById('offsetX'),
-        offsetY: document.getElementById('offsetY'),
-        octaves: document.getElementById('octaves'),
-        frequency: document.getElementById('frequency'),
-        persistence: document.getElementById('persistence')
-    };
+import { createToolWorker } from "./browser-tools.js";
 
-    let currentTimestamp = Date.now();
-    let generateTimeout = null;
-    const GENERATE_DELAY = 500;
+const sliders = ["noiseSize", "offsetX", "offsetY", "octaves", "frequency", "persistence"]
+    .map((id) => document.getElementById(id));
+const imageContainer = document.getElementById("imageContainer");
+const save = document.getElementById("saveBtn");
+const status = document.getElementById("noiseStatus");
+let worker;
+try {
+    worker = createToolWorker();
+} catch {
+    // Fall back to server-side generation.
+}
+let seed = 0;
+let timer;
+let requestId = 0;
+let currentUrl;
 
-    Object.keys(sliders).forEach(key => {
-        const slider = sliders[key];
-        const valueElement = document.getElementById(`${key}Value`);
+async function generate(id) {
+    const args = [...sliders.map((slider) => Number(slider.value)), seed];
+    status.textContent = "Генерируем карту...";
 
-        slider.addEventListener('input', function () {
-            valueElement.textContent = this.value;
-            scheduleGenerateNoise(false);
-        });
-    });
-
-    document.getElementById('generateBtn').addEventListener('click', function () {
-        generateNoise(true);
-    });
-
-    document.getElementById('saveBtn').addEventListener('click', saveImage);
-
-    generateNoise(true);
-
-    function scheduleGenerateNoise(useNewTimestamp) {
-        if (generateTimeout) {
-            clearTimeout(generateTimeout);
+    try {
+        let blob;
+        let local = false;
+        if (worker) {
+            try {
+                const bytes = await worker.run("noise", args);
+                blob = new Blob([bytes], { type: "image/bmp" });
+                local = true;
+            } catch {
+                worker?.close();
+                worker = undefined;
+            }
         }
-
-        generateTimeout = setTimeout(() => {
-            generateNoise(useNewTimestamp);
-            generateTimeout = null;
-        }, GENERATE_DELAY);
-    }
-
-    function generateNoise(useNewTimestamp) {
-        const imageContainer = document.getElementById('imageContainer');
-        const img = new Image(512, 512);
-        img.className = "noise-image";
-        img.id = "noiseImage";
-
-        if (useNewTimestamp) {
-            currentTimestamp = Date.now();
+        if (id !== requestId) return;
+        if (!blob) {
+            const params = new URLSearchParams(
+                ["size", "offsetX", "offsetY", "octaves", "frequency", "persistence", "t"]
+                    .map((name, i) => [name, args[i]]));
+            const response = await fetch(`/noise/generate?${params}`);
+            if (!response.ok) throw new Error("Не удалось создать карту шума");
+            blob = await response.blob();
         }
-
-        const params = {
-            size: parseInt(sliders.noiseSize.value),
-            offsetX: parseInt(sliders.offsetX.value),
-            offsetY: parseInt(sliders.offsetY.value),
-            octaves: parseInt(sliders.octaves.value),
-            frequency: parseFloat(sliders.frequency.value),
-            persistence: parseFloat(sliders.persistence.value)
-        };
-
-        const noise_url = `/noise/generate?size=${params.size}&offsetX=${params.offsetX}&offsetY=${params.offsetY}&octaves=${params.octaves}&frequency=${params.frequency}&persistence=${params.persistence}&t=${currentTimestamp}`;
-
-        console.log("Generate noise from: ", noise_url);
-        img.src = noise_url;
-
-        img.onload = function () {
-            imageContainer.innerHTML = '';
-            imageContainer.appendChild(img);
-        };
-
-        img.onerror = function (event) {
-            console.error("Error while load image");
-        };
+        if (id !== requestId) return;
+        if (currentUrl) URL.revokeObjectURL(currentUrl);
+        currentUrl = URL.createObjectURL(blob);
+        const image = new Image(512, 512);
+        image.className = "noise-image";
+        image.alt = "Карта шума";
+        image.src = currentUrl;
+        imageContainer.replaceChildren(image);
+        save.disabled = false;
+        status.textContent = local ? "Карта создана в браузере" : "Карта создана на сервере";
+    } catch {
+        if (id === requestId) status.textContent = "Не удалось создать карту шума";
     }
+}
 
-    function saveImage() {
-        const image = document.getElementById('noiseImage');
-        const link = document.createElement('a');
-        
-        link.download = "noise_image.bmp";
+for (const slider of sliders) {
+    slider.addEventListener("input", () => {
+        document.getElementById(`${slider.id}Value`).textContent = slider.value;
+        clearTimeout(timer);
+        const id = ++requestId;
+        timer = setTimeout(() => generate(id), 500);
+    });
+}
 
-        link.href = image.src;
+function newMap() {
+    clearTimeout(timer);
+    seed = Date.now() | 0;
+    generate(++requestId);
+}
 
-        link.click();
-    }
+document.getElementById("generateBtn").addEventListener("click", newMap);
+save.addEventListener("click", () => {
+    const link = document.createElement("a");
+    link.href = currentUrl;
+    link.download = "noise_image.bmp";
+    link.click();
 });
+newMap();

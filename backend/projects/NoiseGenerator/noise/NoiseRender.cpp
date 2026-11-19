@@ -21,15 +21,6 @@ noise::utils::Image NOISEGENERATOR_NAMSEPACE::NoiseRender::createImage()
 	m_renderer.SetLightContrast(3.0); // Triple the contrast
 	m_renderer.SetLightBrightness(2.0); // Double the brightness
 
-	try
-	{
-		m_renderer.Render();
-	}
-	catch (const noise::Exception& exc)
-	{
-		LOG_ERROR << "error during creating noise image";
-	}
-	
-
+	m_renderer.Render();
 	return image;
 }

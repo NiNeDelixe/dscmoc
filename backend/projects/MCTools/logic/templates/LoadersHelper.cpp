@@ -1,5 +1,21 @@
 #include "LoadersHelper.hpp"
 
+LoadersHelper::Loaders LoadersHelper::loadersFromString(const std::string& loader)
+{
+    if (loader == "fabric")
+        return Loaders::FABRIC;
+    if (loader == "forge")
+        return Loaders::FORGE;
+    if (loader == "neoforge")
+        return Loaders::NEOFORGE;
+    return Loaders::ALL;
+}
+
+bool LoadersHelper::isKnownLoader(const std::string& loader)
+{
+    return loader == "fabric" || loader == "forge" || loader == "neoforge";
+}
+
 std::vector<LoadersHelper::LoaderVersionEntry> LoadersHelper::getAllLoaderVersions(const std::string& mc_version, const Loaders& loader) const
 {
 
@@ -50,10 +66,9 @@ std::vector<LoadersHelper::LoaderVersionEntry> LoadersHelper::getAllFabricVersio
     {
         std::string version = versions[i]["loader"]["version"].template get<std::string>();
         bool is_stable = versions[i]["loader"]["stable"].template get<bool>();
-        std::string mc_version_ = versions[i]["intermediary"]["version"].template get<std::string>();
 
-        
-        result.push_back(LoaderVersionEntry{"fabric", version, is_stable, mc_version_});
+        // Fabric already filters the response by the requested Minecraft version.
+        result.push_back(LoaderVersionEntry{"fabric", version, is_stable, mc_version});
     }
 
     return result;

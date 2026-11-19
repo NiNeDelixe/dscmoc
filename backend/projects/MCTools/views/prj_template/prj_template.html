@@ -1,16 +1,12 @@
 <!doctype html>
 <html lang="ru">
 
-<%c++
-    auto para=@@.get<std::unordered_map<std::string, std::string, utils::internal::SafeStringHash>>("parameters");
-%>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>MCTools - [[ title ]]</title>
     <link rel="stylesheet" href="/static/css/mctools.css">
-    <script src="/static/js/templates.js" defer></script>
+    <script type="module" src="/static/js/templates.js"></script>
     <script src="/static/js/mctools.js" defer></script>
 </head>
 
@@ -21,7 +17,8 @@
             <div class="section-heading">
                 <div>
                     <h1>Конструктор модпака</h1>
-                    <p><!-- BACKEND: описание конструктора --></p>
+                    <p>Подбор модов идёт по Modrinth с фильтром по выбранному загрузчику и
+                        версии Minecraft.</p>
                 </div>
             </div>
             <div class="workspace">

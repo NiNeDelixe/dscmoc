@@ -7,8 +7,6 @@
 #include <noise/noise.h>
 #include <noise/noiseutils.h>
 
-#include <trantor/utils/Logger.h>
-
 #include "NoiseMaker.hpp"
 
 namespace NOISEGENERATOR_NAMSEPACE

@@ -1,7 +1,3 @@
-<%c++
-    auto para=@@.get<std::unordered_map<std::string, std::string, utils::internal::SafeStringHash>>("parameters");
-%>
-
 <div class="wizard-stage hidden" data-stage="2">
     <h2>Версия Minecraft</h2>
     <div class="field">
@@ -10,7 +6,7 @@
             <option value="">Сначала выберите загрузчик</option>
         </select>
     </div>
-    <p id="versionStatus" role="status"></p>
+    <p id="version-status" class="muted" role="status"></p>
 
     <div class="field">
         <label for="loader-version">Версия загрузчика</label>
@@ -22,5 +18,5 @@
         <input type="checkbox" id="stable-only" checked>
         Только стабильные версии
     </label>
-    <p id="loader-version-status" role="status"></p>
+    <p id="loader-version-status" class="muted" role="status"></p>
 </div>

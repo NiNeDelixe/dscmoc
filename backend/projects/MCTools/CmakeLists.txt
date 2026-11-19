@@ -6,6 +6,9 @@ set(CONTROLLERS_SOURCES
 set(LOGIC_SOURCES
 	"MCTools/logic/templates/MinecraftVersions.cpp"
 	"MCTools/logic/templates/LoadersHelper.cpp"
+	"MCTools/logic/templates/ModCatalog.cpp"
+	"MCTools/logic/templates/ModsHelper.cpp"
+	"MCTools/logic/templates/ModpackExporter.cpp"
 )
 
 set(ALL_SOURCES

@@ -5,6 +5,8 @@
 
 #include <string>
 #include <vector>
+#include <chrono>
+#include <mutex>
 
 #include <cpr/api.h>
 #include <nlohmann/json.hpp>
@@ -30,11 +32,22 @@ public:
     
 
 public:
-    std::vector<VersionEntry> getAllVersions() const;
+    std::vector<VersionEntry> getAllReleases() const;
 
+    void invalidateCache() const;
+
+private:
+    std::vector<VersionEntry> fetchAllVersions() const;
 
 private:
     const std::string m_url = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
+
+    mutable std::mutex m_mutex;
+    mutable std::vector<VersionEntry> m_cache;
+    mutable std::chrono::steady_clock::time_point m_cached_at{};
+    mutable bool m_cache_valid = false;
+
+    static constexpr std::chrono::seconds m_cache_ttl{std::chrono::minutes(30)};
 };
 
 #endif // TEMPLATES_MINECRAFT_VERIONS_HPP_

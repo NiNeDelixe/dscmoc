@@ -1,131 +1,113 @@
+import { minecraftVersions, loaderVersions } from "./modpack-client.js";
 
-const versionSelect = document.getElementById("mc-version");
-const versionStatus = document.getElementById("version-status");
-let versionRequest = 0;
+(() => {
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
-async function loadVersions() {
-    const themes = [...document.querySelectorAll(
-        'input[name="theme"]:checked'
-    )].map(input => input.value);
+    const versionSelect = $("#mc-version");
+    const loaderVersionSelect = $("#loader-version");
 
-    const loader = document.querySelector(
-        'input[name="loader"]:checked'
-    )?.value;
+    if (!versionSelect || !loaderVersionSelect) return;
 
-    const requestId = ++versionRequest;
+    const versionStatus = $("#version-status");
+    const loaderVersionStatus = $("#loader-version-status");
+    const stableOnly = $("#stable-only");
 
-    versionSelect.replaceChildren(
-        new Option("Загрузка версий...", "")
-    );
-    versionSelect.disabled = true;
+    const themes = () => $$('input[name="theme"]:checked').map((i) => i.value);
+    const loader = () => $('input[name="loader"]:checked')?.value || "";
 
-    if (!themes.length || !loader) {
-        versionSelect.replaceChildren(
-            new Option("Выберите тематики и загрузчик модов.", "")
-        );
-        versionStatus.textContent =
-            "Выберите тематики и загрузчик модов.";
-        return;
+    const setStatus = (node, text) => {
+        if (node) node.textContent = text;
+    };
+
+    let versionRequest = 0;
+
+    async function loadVersions() {
+        const requestId = ++versionRequest;
+
+        versionSelect.replaceChildren(new Option("Загрузка версий...", ""));
+        versionSelect.disabled = true;
+        loadLoaderVersions();
+
+        if (!themes().length || !loader()) {
+            versionSelect.replaceChildren(
+                new Option("Выберите тематики и загрузчик модов.", ""));
+            setStatus(versionStatus, "Выберите тематики и загрузчик модов.");
+            return;
+        }
+
+        try {
+            const versions = await minecraftVersions(loader());
+            if (requestId !== versionRequest) return;
+
+            versionSelect.replaceChildren(
+                new Option("Выберите версию Minecraft", ""));
+
+            versions.forEach((version) => {
+                versionSelect.add(new Option(version.id, version.id));
+            });
+
+            versionSelect.disabled = versions.length === 0;
+            setStatus(versionStatus, `Найдено версий: ${versions.length}`);
+        } catch (error) {
+            if (requestId !== versionRequest) return;
+            versionSelect.replaceChildren(
+                new Option("Не удалось загрузить версии", ""));
+            setStatus(versionStatus, error.message);
+        }
     }
 
-    try {
-        const response = await fetch("/mctools/api/modpack/versions/mc", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ themes, loader })
-        });
+    $$('input[name="theme"], input[name="loader"]')
+        .forEach((input) => input.addEventListener("change", loadVersions));
 
-        const data = await response.json();
-        if (requestId !== versionRequest) return;
-        if (!response.ok) throw new Error("Ошибка получения версий");
+    let loaderRequestId = 0;
 
-        versionSelect.replaceChildren(
-            new Option("Выберите версию Minecraft", "")
-        );
+    async function loadLoaderVersions() {
+        const currentLoader = loader();
+        const mcVersion = versionSelect.value;
+        const requestId = ++loaderRequestId;
 
-        data.versions.forEach(version => {
-            versionSelect.add(new Option(version.id, version.id));
-        });
+        loaderVersionSelect.replaceChildren();
+        setStatus(loaderVersionStatus, "");
 
-        versionSelect.disabled = data.versions.length === 0;
-        versionStatus.textContent =
-            `Найдено версий: ${data.versions.length}`;
-    } catch (error) {
-        if (requestId !== versionRequest) return;
-        versionSelect.replaceChildren(
-            new Option("Не удалось загрузить версии", error.message)
-        );
-        versionStatus.textContent = error.message;
+        if (!currentLoader || !mcVersion) {
+            loaderVersionSelect.replaceChildren(
+                new Option("Сначала выберите версию Minecraft", ""));
+            loaderVersionSelect.disabled = true;
+            return;
+        }
+
+        loaderVersionSelect.replaceChildren(new Option("Загрузка версий...", ""));
+        loaderVersionSelect.disabled = true;
+
+        try {
+            const available = await loaderVersions(currentLoader, mcVersion);
+            if (requestId !== loaderRequestId) return;
+
+            const onlyStable = stableOnly ? stableOnly.checked : false;
+            const versions = available.filter((v) => !onlyStable || v.is_stable);
+
+            loaderVersionSelect.replaceChildren(
+                new Option("Автоматический выбор", ""));
+            versions.forEach((v) => {
+                loaderVersionSelect.add(new Option(
+                    `${v.version}${v.is_stable ? " (stable)" : ""}`, v.version));
+            });
+
+            loaderVersionSelect.disabled = versions.length === 0;
+            setStatus(loaderVersionStatus,
+                versions.length
+                    ? `Найдено версий: ${versions.length}`
+                    : "Подходящих версий загрузчика не найдено — сборка соберётся с автоматическим выбором.");
+        } catch (error) {
+            if (requestId !== loaderRequestId) return;
+            loaderVersionSelect.replaceChildren(new Option("Автоматический выбор", ""));
+            setStatus(loaderVersionStatus, error.message);
+        }
     }
-}
 
-document.querySelectorAll(
-    'input[name="theme"], input[name="loader"]'
-).forEach(input => input.addEventListener("change", loadVersions));
+    versionSelect.addEventListener("change", loadLoaderVersions);
+    stableOnly?.addEventListener("change", loadLoaderVersions);
 
-
-
-const loaderVersionSelect = document.getElementById("loader-version");
-const loaderVersionStatus = document.getElementById("loader-version-status");
-const stableOnly = document.getElementById("stable-only");
-let loaderRequestId = 0;
-
-async function loadLoaderVersions() {
-    const loader = document.querySelector(
-        'input[name="loader"]:checked'
-    )?.value;
-    const mcVersion = document.getElementById("mc-version").value;
-    const requestId = ++loaderRequestId;
-
-    loaderVersionSelect.replaceChildren(
-        new Option("Загрузка версий...", "")
-    );
-    loaderVersionSelect.disabled = true;
-
-    if (!loader || !mcVersion) return;
-
-    try {
-        const response = await fetch("/mctools/api/modpack/versions/loaders", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ loader, mc_version: mcVersion })
-        });
-
-        const data = await response.json();
-        if (requestId !== loaderRequestId) return;
-        if (!response.ok) throw new Error("Не удалось загрузить версии");
-
-        const versions = (data.versions || []).filter(
-            v => !stableOnly.checked || v.is_stable
-        );
-
-        loaderVersionSelect.replaceChildren(
-            new Option("Выберите версию загрузчика", "")
-        );
-
-        versions.forEach(v => {
-            loaderVersionSelect.add(new Option(
-                `${v.version}${v.is_stable ? " (stable)" : ""}`,
-                v.version
-            ));
-        });
-
-        loaderVersionSelect.disabled = versions.length === 0;
-        loaderVersionStatus.textContent =
-            `Найдено версий: ${versions.length}`;
-    } catch (error) {
-        if (requestId !== loaderRequestId) return;
-        loaderVersionSelect.replaceChildren(
-            new Option("Ошибка загрузки", "")
-        );
-        loaderVersionStatus.textContent = error.message;
-    }
-}
-
-document.getElementById("mc-version")
-    .addEventListener("change", loadLoaderVersions);
-
-document.querySelectorAll('input[name="loader"]')
-    .forEach(input => input.addEventListener("change", loadLoaderVersions));
-
-stableOnly.addEventListener("change", loadLoaderVersions);
+    loadVersions();
+})();

@@ -1,22 +1,13 @@
 #pragma once
-#ifndef CONTROLLERS_NOISE_PAGE_CONTROLLER_HPP_
-#define CONTROLLERS_NOISE_PAGE_CONTROLLER_HPP_
-
-#include "CoreDefines.hpp"
-
-#include <chrono>
-#include <random>
-#include <sstream>
-#include <iomanip>
-#include <fstream>
+#ifndef CONTROLLERS_MCTOOLS_CONTROLLER_HPP_
+#define CONTROLLERS_MCTOOLS_CONTROLLER_HPP_
 
 #include <drogon/HttpController.h>
-
 
 class MCToolsController : public drogon::HttpController<MCToolsController>
 {
 public:
-	MCToolsController();
+	MCToolsController() = default;
 	~MCToolsController() = default;
 
 	METHOD_LIST_BEGIN
@@ -24,6 +15,7 @@ public:
 		ADD_METHOD_TO(MCToolsController::packs, "/mctools/packs", drogon::Get);
 		ADD_METHOD_TO(MCToolsController::skin_viewer, "/mctools/skin_viewer", drogon::Get);
 		ADD_METHOD_TO(MCToolsController::tools, "/mctools/tools", drogon::Get);
+		ADD_METHOD_TO(MCToolsController::apiTools, "/mctools/api/tools", drogon::Get);
 	METHOD_LIST_END
 
 	void mctools(const drogon::HttpRequestPtr& req, drogon::AdviceCallback&& callback) const;
@@ -31,12 +23,8 @@ public:
 	void skin_viewer(const drogon::HttpRequestPtr& req, drogon::AdviceCallback&& callback) const;
 	void tools(const drogon::HttpRequestPtr& req, drogon::AdviceCallback&& callback) const;
 
-    //void download(const drogon::HttpRequestPtr& req, drogon::AdviceCallback&& callback);
-
-private:
-	
+	// Drogon doesn't serve CSV files by default.
+	void apiTools(const drogon::HttpRequestPtr& req, drogon::AdviceCallback&& callback) const;
 };
 
-
-
-#endif // CONTROLLERS_NOISE_PAGE_CONTROLLER_HPP_
+#endif // CONTROLLERS_MCTOOLS_CONTROLLER_HPP_

@@ -4,11 +4,7 @@
 
 #include "CoreDefines.hpp"
 
-#include <chrono>
-#include <random>
-#include <sstream>
-#include <iomanip>
-#include <fstream>
+#include <filesystem>
 
 #include <drogon/HttpController.h>
 
@@ -25,7 +21,7 @@ namespace drogon
         {
             return noise;
         }
-        if (!para.empty())
+        try
         {
             noise.size = std::stoi(para.at("size"));
             noise.offset_x = std::stoi(para.at("offsetX"));
@@ -34,6 +30,10 @@ namespace drogon
             noise.frequency = std::stof(para.at("frequency"));
             noise.persistence = std::stof(para.at("persistence"));
             noise.t = std::stoll(para.at("t"));
+        }
+        catch (const std::exception&)
+        {
+            return {};
         }
         return noise;
     };
@@ -57,8 +57,6 @@ public:
 
 	void noise(const drogon::HttpRequestPtr& req,
 		drogon::AdviceCallback&& callback) const;
-
-    void download(const drogon::HttpRequestPtr& req, drogon::AdviceCallback&& callback);
 
 private:
     std::filesystem::path m_images_paths;

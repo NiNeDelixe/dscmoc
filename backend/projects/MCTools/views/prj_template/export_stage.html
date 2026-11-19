@@ -1,27 +1,34 @@
 <div class="wizard-stage hidden" data-stage="4">
     <h2>Экспорт сборки</h2>
+    <div class="field">
+        <label for="pack-name">Название сборки</label>
+        <input id="pack-name" type="text" value="MCTools сборка" autocomplete="off">
+    </div>
     <div class="download-options">
         <label class="download-option">
             <input type="radio" name="export_format" value="mods-zip" checked>ZIP со всеми модами</label>
-            <label class="download-option">
-                <input type="radio" name="export_format" value="mrpack">Сгенерированный .mrpack</label>
-                <label class="download-option">
-                    <input type="radio" name="export_format" value="pakku-project">ZIP проекта Pakku</label>
+        <label class="download-option">
+            <input type="radio" name="export_format" value="mrpack">Сгенерированный .mrpack</label>
+        <label class="download-option">
+            <input type="radio" name="export_format" value="pakku-project">ZIP проекта Pakku</label>
     </div>
+    <p class="muted" id="export-format-hint"></p>
     <div class="two-columns">
         <div class="field">
             <label for="instructions">Инструкции</label>
-            <select id="instructions" data-populate="instructions">
-                <option value="">Выберите инструкцию</option>
-                <!-- BACKEND: варианты -->
+            <select id="instructions">
+                <option value="">Без инструкций</option>
+                <option value="fabric">Fabric: стандартный запуск</option>
+                <option value="forge">Forge: стандартный запуск</option>
+                <option value="neoforge">NeoForge: стандартный запуск</option>
             </select>
         </div>
         <div class="field">
             <label for="java-args">Аргументы Java</label>
-            <input id="java-args" name="java_args"></div>
+            <input id="java-args" name="java_args" placeholder="-Xmx4G">
+        </div>
     </div>
-    <div class="placeholder" id="instruction-content" data-populate="instruction-content">
-        <!-- BACKEND: текст инструкции -->
-    </div>
+    <div id="instruction-content" class="placeholder"></div>
+    <p id="export-status" class="muted" role="status"></p>
     <button class="button" id="download-button" type="button">Сформировать сборку</button>
 </div>

@@ -41,6 +41,10 @@ public:
     std::vector<LoaderVersionEntry> getAllNeoForgeVersions(const std::string& mc_version) const;
     std::vector<LoaderVersionEntry> getAllForgeVersions(const std::string& mc_version) const;
 
+    static Loaders loadersFromString(const std::string& loader);
+
+    static bool isKnownLoader(const std::string& loader);
+
 private:
     const std::string m_url_fabric = "https://meta.fabricmc.net/v2/versions/loader";
     const std::string m_url_neoforge = "https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml";

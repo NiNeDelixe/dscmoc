@@ -9,6 +9,7 @@ find_package(unofficial-noise CONFIG REQUIRED)
 find_package(unofficial-noiseutils CONFIG REQUIRED)
 find_package(cpr CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
+find_package(minizip CONFIG REQUIRED)
 
 find_program(DROGON_CTL_EXECUTABLE
     NAMES drogon_ctl
@@ -22,6 +23,11 @@ log(INFO "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools/drogon")
 
 
 add_executable(${PROJECT_NAME} main.cpp "CoreDefines.hpp")
+
+# Preserve Cyrillic in manifests built with MSVC.
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /utf-8)
+endif()
 
 create_resource_links(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/static")
 
@@ -58,6 +64,7 @@ target_link_libraries(${PROJECT_NAME}
         unofficial::noiseutils::noiseutils
         cpr::cpr
         nlohmann_json::nlohmann_json
+        MINIZIP::minizip
         deluxe_lib::Core
 )
 
@@ -73,6 +80,11 @@ target_include_directories(
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.json" "${CMAKE_CURRENT_BINARY_DIR}/config.json" COPYONLY)
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.dev.json" "${CMAKE_CURRENT_BINARY_DIR}/config.dev.json" COPYONLY)
 configure_file("${CMAKE_SOURCE_DIR}/.env" "${CMAKE_CURRENT_BINARY_DIR}/.env" COPYONLY)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/projects/MCTools/data/mods.json"
+    "${CMAKE_CURRENT_BINARY_DIR}/data/mods.json"
+    COPYONLY)
 
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY ENABLE_EXPORTS ON)

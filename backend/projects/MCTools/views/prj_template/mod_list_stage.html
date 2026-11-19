@@ -1,13 +1,27 @@
 <div class="wizard-stage hidden" data-stage="3">
     <h2>Выберите моды</h2>
+
     <div class="field">
-        <label for="mod-search">Поиск</label>
-        <input id="mod-search" type="search">
+        <label for="catalog-search">Каталог</label>
+        <input id="catalog-search" type="search" placeholder="фильтр по названию или описанию"
+            autocomplete="off">
     </div>
-    <div class="placeholder" id="mod-list" data-populate="mods">
-        <!-- BACKEND: список совместимых модов -->
-    </div>
-    <p class="muted" id="mod-selection-summary">
-        <!-- BACKEND: количество выбранных модов -->
-    </p>
+    <p id="catalog-status" class="muted" role="status"></p>
+    <div id="mod-list" class="mod-list"></div>
+
+    <details class="extra-search">
+        <summary>Нет нужного мода в каталоге? Найти на Modrinth</summary>
+        <div class="field">
+            <label for="mod-search">Поиск по Modrinth</label>
+            <div class="search-row">
+                <input id="mod-search" type="search" placeholder="например, jei, iris, jei"
+                    autocomplete="off">
+                <button class="button secondary" id="mod-search-button" type="button">Найти</button>
+            </div>
+        </div>
+        <p id="mod-search-status" class="muted" role="status"></p>
+        <div id="search-results" class="mod-list"></div>
+    </details>
+
+    <p class="muted" id="mod-selection-summary"></p>
 </div>

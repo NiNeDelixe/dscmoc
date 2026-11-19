@@ -1,0 +1,44 @@
+name: Build site WASM
+
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wasm:
+    runs-on: ubuntu-latest
+    env:
+      VCPKG_ROOT: ${{ github.workspace }}/out/vcpkg
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
+        with:
+          repository: microsoft/vcpkg
+          ref: e456309491fd875487bf02b8a0dca76c1b1b00cc
+          path: out/vcpkg
+      - uses: mymindstorm/setup-emsdk@v16
+        with:
+          version: '4.0.23'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Bootstrap vcpkg
+        run: '"$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics'
+      - name: Build
+        run: |
+          cmake --preset wasm-release
+          cmake --build out/build/wasm-release
+      - name: Smoke test
+        run: node wasm/smoke.mjs
+      - uses: actions/upload-artifact@v6
+        with:
+          name: site-wasm
+          path: static/wasm/
+          if-no-files-found: error
