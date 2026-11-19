@@ -69,6 +69,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
+      - name: Check Pages configuration
+        uses: actions/configure-pages@v6
       - uses: actions/download-artifact@v7
         with:
           name: wasm-pages
@@ -104,9 +106,9 @@ jobs:
           ref: gh-pages
           path: published
           persist-credentials: false
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: published
       - name: Deploy to GitHub Pages
         id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
