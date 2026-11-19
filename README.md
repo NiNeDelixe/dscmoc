@@ -10,11 +10,12 @@ Site on c++20 and [Drogon](https://drogon.org/)
 
 ## WebAssembly
 
-Try the live WebAssembly demo:
-- Main: [https://NiNeDelixe.github.io/dscmoc/](https://NiNeDelixe.github.io/deluxe-lib/)
-- Develop: [https://NiNeDelixe.github.io/dscmoc/develop/](https://NiNeDelixe.github.io/deluxe-lib/develop/)
+Try the standalone WebAssembly noise generator:
+- [Main](https://ninedelixe.github.io/dscmoc/)
+- [Develop](https://ninedelixe.github.io/dscmoc/develop/)
 
-The `main` branch deploys to the root, `develop` to `/develop/`, and tags to `/tagname/`.
+The `main` branch deploys to the root, `develop` to `/develop/`, and tags to `/<tag>/`.
+The modpack wizard still requires Drogon. See the [WASM build and deployment guide](wasm/README.md).
 
 
 ## More Details

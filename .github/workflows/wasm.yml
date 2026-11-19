@@ -1,9 +1,10 @@
-name: Build site WASM
+name: Build and deploy site WASM
 
 on:
   pull_request:
   push:
     branches: [main, develop]
+    tags: ['**']
   release:
     types: [published]
   workflow_dispatch:
@@ -42,29 +43,70 @@ jobs:
           name: site-wasm
           path: static/wasm/
           if-no-files-found: error
-      - name: Prepare deployment
-        run: |
-          # web-dist target already created build/web-dist/
-          # Just copy it to dist/ for GitHub Pages action
-          cp -r build/web-dist dist
+      - name: Build Pages demo
+        run: node wasm/build-pages.mjs
+      - uses: actions/upload-artifact@v6
+        with:
+          name: wasm-pages
+          path: out/wasm-pages/
+          if-no-files-found: error
 
-      - name: Determine deploy path
-        id: deploy-path
-        if: github.event_name != 'pull_request' && github.event_name != 'release'
+  pages:
+    needs: wasm
+    if: >-
+      !github.event.repository.fork &&
+      (github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || github.ref_type == 'tag')))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    concurrency:
+      group: wasm-pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          name: wasm-pages
+          path: out/wasm-pages
+      - name: Select demo path
+        id: demo
         run: |
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            echo "path=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
-            echo "path=." >> $GITHUB_OUTPUT
-          elif [[ "$GITHUB_REF" == refs/heads/develop ]]; then
-            echo "path=develop" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Deploy to GitHub Pages
-        if: github.event_name != 'pull_request' && github.event_name != 'release'
+          case "$GITHUB_REF" in
+            refs/heads/main) path=. ;;
+            refs/heads/develop) path=develop ;;
+            refs/tags/*)
+              path="${GITHUB_REF#refs/tags/}"
+              case "/$path/" in
+                /develop/*|*/static/*|*/index.html/*)
+                  echo "::error::Tag conflicts with a reserved Pages path"
+                  exit 1
+                  ;;
+              esac
+              ;;
+            *) exit 1 ;;
+          esac
+          echo "path=$path" >> "$GITHUB_OUTPUT"
+      - name: Save demo alongside other builds
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          destination_dir: ${{ steps.deploy-path.outputs.path }}
+          publish_dir: out/wasm-pages
+          destination_dir: ${{ steps.demo.outputs.path }}
           keep_files: true
+      # GITHUB_TOKEN pushes don't trigger a branch-based Pages build.
+      - uses: actions/checkout@v6
+        with:
+          ref: gh-pages
+          path: published
+          persist-credentials: false
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: published
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

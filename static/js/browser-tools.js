@@ -1,5 +1,5 @@
 export function createToolWorker() {
-    const worker = new Worker("/static/js/tools-worker.js", { type: "module" });
+    const worker = new Worker(new URL("./tools-worker.js", import.meta.url), { type: "module" });
     const pending = new Map();
     let nextId = 0;
     let failure;

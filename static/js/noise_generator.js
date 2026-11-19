@@ -5,6 +5,7 @@ const sliders = ["noiseSize", "offsetX", "offsetY", "octaves", "frequency", "per
 const imageContainer = document.getElementById("imageContainer");
 const save = document.getElementById("saveBtn");
 const status = document.getElementById("noiseStatus");
+const endpoint = document.body.dataset.noiseEndpoint;
 let worker;
 try {
     worker = createToolWorker();
@@ -35,10 +36,14 @@ async function generate(id) {
         }
         if (id !== requestId) return;
         if (!blob) {
+            if (!endpoint) {
+                status.textContent = "Не удалось запустить WebAssembly в браузере";
+                return;
+            }
             const params = new URLSearchParams(
                 ["size", "offsetX", "offsetY", "octaves", "frequency", "persistence", "t"]
                     .map((name, i) => [name, args[i]]));
-            const response = await fetch(`/noise/generate?${params}`);
+            const response = await fetch(`${endpoint}?${params}`);
             if (!response.ok) throw new Error("Не удалось создать карту шума");
             blob = await response.blob();
         }
