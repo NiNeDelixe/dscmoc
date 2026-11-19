@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>MCTools - Конструктор модпака</title>
+    <link rel="stylesheet" href="../../static/css/mctools.css">
+    <script type="module" src="../../static/js/templates.js"></script>
+    <script src="../../static/js/mctools.js" defer></script>
+</head>
+
+<body data-static-site="../../" data-page="templates">
+    <div id="site-header"><header class="topbar">
+    <div class="container nav"><a class="brand" href="../../mctools/">
+        <span class="brand-mark">M</span>
+        <span>MC
+            <span>Tools
+
+            </span>
+        </span>
+    </a>
+    <button class="button secondary nav-toggle" id="nav-toggle" aria-expanded="false">Меню</button>
+        <nav class="nav-links" id="nav-links">
+            <a href="../../mctools/" data-nav="home">Главная</a>
+            <a href="../../mctools/templates/" data-nav="templates">Шаблоны</a>
+            <a href="../../mctools/skin_viewer/" data-nav="skin-viewer">Skin Viewer</a>
+            <a href="../../mctools/packs/" data-nav="packs">Готовые сборки</a>
+            <a href="../../mctools/tools/" data-nav="tools">Доп. инструменты</a>
+        </nav>
+    </div>
+</header></div>
+    <main class="container page-main">
+        <section class="section">
+            <div class="section-heading">
+                <div>
+                    <h1>Конструктор модпака</h1>
+                    <p>Подбор модов идёт по Modrinth с фильтром по выбранному загрузчику и
+                        версии Minecraft.</p>
+                </div>
+            </div>
+            <div class="workspace">
+                <aside class="card step-list">
+                    <button class="step active" data-step="0">1 Тематики</button>
+                    <button class="step" data-step="1">2 Загрузчик модов</button>
+                    <button class="step" data-step="2">3 Версия Minecraft</button>
+                    <button class="step" data-step="3">4 Выбор модов</button>
+                    <button class="step" data-step="4">5 Экспорт</button>
+                </aside>
+                <section class="card wizard-panel" aria-live="polite">
+                    <div class="wizard-stage" data-stage="0">
+    <h2>Выберите тематики</h2>
+    <div class="choice-grid">
+        <label class="choice">
+            <input type="checkbox" name="theme" value="optimization">Оптимизация</label>
+            <label class="choice">
+                <input type="checkbox" name="theme" value="visual">Визуал</label>
+                <label class="choice">
+                    <input type="checkbox" name="theme" value="quality-of-life">Удобство</label>
+    </div>
+</div>
+                    <div class="wizard-stage hidden" data-stage="1">
+    <h2>Загрузчик модов</h2>
+        <div class="choice-grid">
+            <label class="choice">
+                <input type="radio" name="loader" value="fabric">Fabric</label>
+                <label class="choice">
+                    <input type="radio" name="loader" value="forge">Forge</label>
+                    <label class="choice">
+                        <input type="radio" name="loader" value="neoforge">NeoForge</label>
+        </div>
+</div>
+                    <div class="wizard-stage hidden" data-stage="2">
+    <h2>Версия Minecraft</h2>
+    <div class="field">
+        <label for="mc-version">Версия Minecraft</label>
+        <select id="mc-version" name="minecraft_version" data-populate="minecraft-versions" disabled>
+            <option value="">Сначала выберите загрузчик</option>
+        </select>
+    </div>
+    <p id="version-status" class="muted" role="status"></p>
+
+    <div class="field">
+        <label for="loader-version">Версия загрузчика</label>
+        <select id="loader-version" name="loader_version" data-populate="loader-versions">
+            <option value="">Автоматический выбор</option>
+        </select>
+    </div>
+    <label class="choice">
+        <input type="checkbox" id="stable-only" checked>
+        Только стабильные версии
+    </label>
+    <p id="loader-version-status" class="muted" role="status"></p>
+</div>
+                    <div class="wizard-stage hidden" data-stage="3">
+    <h2>Выберите моды</h2>
+
+    <div class="field">
+        <label for="catalog-search">Каталог</label>
+        <input id="catalog-search" type="search" placeholder="фильтр по названию или описанию"
+            autocomplete="off">
+    </div>
+    <p id="catalog-status" class="muted" role="status"></p>
+    <div id="mod-list" class="mod-list"></div>
+
+    <details class="extra-search">
+        <summary>Нет нужного мода в каталоге? Найти на Modrinth</summary>
+        <div class="field">
+            <label for="mod-search">Поиск по Modrinth</label>
+            <div class="search-row">
+                <input id="mod-search" type="search" placeholder="например, jei, iris, jei"
+                    autocomplete="off">
+                <button class="button secondary" id="mod-search-button" type="button">Найти</button>
+            </div>
+        </div>
+        <p id="mod-search-status" class="muted" role="status"></p>
+        <div id="search-results" class="mod-list"></div>
+    </details>
+
+    <p class="muted" id="mod-selection-summary"></p>
+</div>
+                    <div class="wizard-stage hidden" data-stage="4">
+    <h2>Экспорт сборки</h2>
+    <div class="field">
+        <label for="pack-name">Название сборки</label>
+        <input id="pack-name" type="text" value="MCTools сборка" autocomplete="off">
+    </div>
+    <div class="download-options">
+        <label class="download-option">
+            <input type="radio" name="export_format" value="mods-zip" checked>ZIP со всеми модами</label>
+        <label class="download-option">
+            <input type="radio" name="export_format" value="mrpack">Сгенерированный .mrpack</label>
+        <label class="download-option">
+            <input type="radio" name="export_format" value="pakku-project">ZIP проекта Pakku</label>
+    </div>
+    <p class="muted" id="export-format-hint"></p>
+    <div class="two-columns">
+        <div class="field">
+            <label for="instructions">Инструкции</label>
+            <select id="instructions">
+                <option value="">Без инструкций</option>
+                <option value="fabric">Fabric: стандартный запуск</option>
+                <option value="forge">Forge: стандартный запуск</option>
+                <option value="neoforge">NeoForge: стандартный запуск</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="java-args">Аргументы Java</label>
+            <input id="java-args" name="java_args" placeholder="-Xmx4G">
+        </div>
+    </div>
+    <div id="instruction-content" class="placeholder"></div>
+    <p id="export-status" class="muted" role="status"></p>
+    <button class="button" id="download-button" type="button">Сформировать сборку</button>
+</div>
+                    <div class="wizard-footer">
+                        <button class="button secondary" id="prev-step" disabled>Назад</button>
+                        <button class="button" id="next-step">Далее</button>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+    <div id="site-footer"><footer class="footer">
+    <div class="container footer-inner"><a class="brand" href="../../mctools/"><span
+                class="brand-mark">M</span><span>MC<span>Tools</span></span></a>
+        <div>Инструменты для сборки модпаков Minecraft</div>
+        <nav class="footer-links">
+            <a href="../../">К проектам</a>
+            <a href="../../mctools/templates/">Конструктор</a>
+            <a href="../../mctools/packs/">Готовые сборки</a>
+        </nav>
+    </div>
+</footer>
+</div>
+</body>
+
+</html>

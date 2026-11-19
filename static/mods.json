@@ -1,0 +1,251 @@
+{
+  "_comment": [
+    "Каталог модов для шага 4 мастера сборки. Загружается в таблицу mods при старте",
+    "сервера (ModCatalog::ensureSchemaAndSeed) и обновляется по project_id через",
+    "INSERT OR REPLACE, поэтому правки этого файла применяются после перезапуска.",
+    "project_id — id проекта на Modrinth, он же нужен для экспорта сборки.",
+    "themes: optimization | visual | quality-of-life (совпадают со значениями на шаге 1)."
+  ],
+  "mods": [
+    {
+      "project_id": "AANobbMI",
+      "slug": "sodium",
+      "title": "Sodium",
+      "description": "Быстрый движок рендеринга: повышает FPS и убирает микрофризы.",
+      "icon_url": "https://cdn.modrinth.com/data/AANobbMI/295862f4724dc3f78df3447ad6072b2dcd3ef0c9_96.webp",
+      "themes": ["optimization", "visual"],
+      "loaders": ["fabric", "neoforge"],
+      "position": 10
+    },
+    {
+      "project_id": "gvQqBUqZ",
+      "slug": "lithium",
+      "title": "Lithium",
+      "description": "Оптимизация игровой логики без потери совместимости с серверами.",
+      "icon_url": "https://cdn.modrinth.com/data/gvQqBUqZ/bcc8686c13af0143adf4285d741256af824f70b7_96.webp",
+      "themes": ["optimization"],
+      "loaders": ["fabric", "neoforge"],
+      "position": 20
+    },
+    {
+      "project_id": "uXXizFIs",
+      "slug": "ferrite-core",
+      "title": "FerriteCore",
+      "description": "Снижает потребление памяти. Обычно ставят первым в сборку.",
+      "icon_url": "https://cdn.modrinth.com/data/uXXizFIs/222a126f26f8f9ae1eb339f3b767677f18bff31f_96.webp",
+      "themes": ["optimization"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 30
+    },
+    {
+      "project_id": "H8CaAYZC",
+      "slug": "starlight",
+      "title": "Starlight",
+      "description": "Переписывает движок освещения: чинит артефакты и ускоряет свет.",
+      "icon_url": "https://cdn.modrinth.com/data/H8CaAYZC/aa11bf788b9893370ff1e26af1c275dfd7590c59_96.webp",
+      "themes": ["optimization"],
+      "loaders": ["fabric"],
+      "position": 40
+    },
+    {
+      "project_id": "fQEb0iXm",
+      "slug": "krypton",
+      "title": "Krypton",
+      "description": "Оптимизация сетевого стека Minecraft.",
+      "icon_url": "https://cdn.modrinth.com/data/fQEb0iXm/3ea60899d060a9286e03b87bfa9e71d0cbe2dde7_96.webp",
+      "themes": ["optimization"],
+      "loaders": ["fabric"],
+      "position": 50
+    },
+    {
+      "project_id": "nmDcB62a",
+      "slug": "modernfix",
+      "title": "ModernFix",
+      "description": "Комплексная оптимизация, экономия памяти и исправление багов.",
+      "icon_url": "https://cdn.modrinth.com/data/nmDcB62a/2af94de5e08ae54567ee86b968fc7ce076d9fee5_96.webp",
+      "themes": ["optimization"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 60
+    },
+    {
+      "project_id": "NNAgCjsB",
+      "slug": "entityculling",
+      "title": "Entity Culling",
+      "description": "Прячет невидимые блоки и сущности, заметно поднимая FPS.",
+      "icon_url": "https://cdn.modrinth.com/data/NNAgCjsB/7873452d6cede4daed12da3d7d8c193ab88b4fd6_96.webp",
+      "themes": ["optimization", "visual"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 70
+    },
+    {
+      "project_id": "5ZwdcRci",
+      "slug": "immediatelyfast",
+      "title": "ImmediatelyFast",
+      "description": "Ускоряет рендеринг в immediate mode.",
+      "icon_url": "https://cdn.modrinth.com/data/5ZwdcRci/e57b6b451425692ac17ad322d5e14bea686a383a_96.webp",
+      "themes": ["optimization"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 80
+    },
+    {
+      "project_id": "PtjYWJkn",
+      "slug": "sodium-extra",
+      "title": "Sodium Extra",
+      "description": "Дополнение к Sodium: анимированные текстуры, коробки и плавный свет.",
+      "icon_url": "https://cdn.modrinth.com/data/PtjYWJkn/0df4fb22a11e1dcb5e83cb0aadd275b571aca7a9_96.webp",
+      "themes": ["optimization", "visual"],
+      "loaders": ["fabric", "neoforge"],
+      "position": 90
+    },
+    {
+      "project_id": "YL57xq9U",
+      "slug": "iris",
+      "title": "Iris Shaders",
+      "description": "Загрузчик шейдеров, совместимый с пакетами OptiFine.",
+      "icon_url": "https://cdn.modrinth.com/data/YL57xq9U/18d0e7f076d3d6ed5bedd472b853909aac5da202_96.webp",
+      "themes": ["visual"],
+      "loaders": ["fabric", "neoforge"],
+      "position": 110
+    },
+    {
+      "project_id": "4I1XuqiY",
+      "slug": "entity-model-features",
+      "title": "Entity Model Features",
+      "description": "Кастомные модели сущностей в формате OptiFine.",
+      "icon_url": "https://cdn.modrinth.com/data/4I1XuqiY/6e5bbd0d06b1741bfdab6c0cfab6de8fdaf0064c_96.webp",
+      "themes": ["visual"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 120
+    },
+    {
+      "project_id": "BVzZfTc1",
+      "slug": "entitytexturefeatures",
+      "title": "Entity Texture Features",
+      "description": "Светящиеся и случайные текстуры сущностей для ресурспаков.",
+      "icon_url": "https://cdn.modrinth.com/data/BVzZfTc1/af683d206d50b05258d865b0d6e4aa2f2cee12f2_96.webp",
+      "themes": ["visual"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 130
+    },
+    {
+      "project_id": "yBW8D80W",
+      "slug": "lambdynamiclights",
+      "title": "LambDynamicLights",
+      "description": "Динамический свет от факелов, лавы и других источников.",
+      "icon_url": "https://cdn.modrinth.com/data/yBW8D80W/d4f5c3ff8df7caf024178b04eca6d69f95979cfe_96.webp",
+      "themes": ["visual"],
+      "loaders": ["fabric", "neoforge"],
+      "position": 140
+    },
+    {
+      "project_id": "1IjD5062",
+      "slug": "continuity",
+      "title": "Continuity",
+      "description": "Связные текстуры: стекло, металлы и другие блоки без швов.",
+      "icon_url": "https://cdn.modrinth.com/data/1IjD5062/icon.png",
+      "themes": ["visual"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 150
+    },
+    {
+      "project_id": "kYq5qkSL",
+      "slug": "borderless-mining",
+      "title": "Borderless Mining",
+      "description": "Полноэкранный режим в окне без рамки.",
+      "icon_url": "https://cdn.modrinth.com/data/kYq5qkSL/icon.png",
+      "themes": ["visual", "quality-of-life"],
+      "loaders": ["fabric", "forge"],
+      "position": 160
+    },
+    {
+      "project_id": "w7ThoJFB",
+      "slug": "zoomify",
+      "title": "Zoomify",
+      "description": "Гибко настраиваемое приближение камеры.",
+      "icon_url": "https://cdn.modrinth.com/data/w7ThoJFB/e2de67a0bfb9e8aa2347982ab3ec5463f26cca31_96.webp",
+      "themes": ["visual"],
+      "loaders": ["fabric", "neoforge"],
+      "position": 170
+    },
+    {
+      "project_id": "u6dRKJwZ",
+      "slug": "jei",
+      "title": "Just Enough Items",
+      "description": "Просмотр предметов и рецептов прямо в игре.",
+      "icon_url": "https://cdn.modrinth.com/data/u6dRKJwZ/4a3f18ac0d096c9f8e9176984c44be4e58f94c89_96.webp",
+      "themes": ["quality-of-life"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 210
+    },
+    {
+      "project_id": "nfn13YXA",
+      "slug": "roughly-enough-items",
+      "title": "Roughly Enough Items",
+      "description": "Альтернатива JEI с необычным интерфейсом поиска.",
+      "icon_url": "https://cdn.modrinth.com/data/nfn13YXA/54ac5daa4166011bae713448e84413987316433a_96.webp",
+      "themes": ["quality-of-life"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 220
+    },
+    {
+      "project_id": "mOgUt4GM",
+      "slug": "modmenu",
+      "title": "Mod Menu",
+      "description": "Меню установленных модов с быстрым переходом к настройкам.",
+      "icon_url": "https://cdn.modrinth.com/data/mOgUt4GM/5a20ed1450a0e1e79a1fe04e61bb4e5878bf1d20.png",
+      "themes": ["quality-of-life"],
+      "loaders": ["fabric"],
+      "position": 230
+    },
+    {
+      "project_id": "lfHFW1mp",
+      "slug": "journeymap",
+      "title": "JourneyMap",
+      "description": "Карта мира в реальном времени с отметками и waypoint'ами.",
+      "icon_url": "https://cdn.modrinth.com/data/lfHFW1mp/a1c571a21a88f6fa59eab67829f216f65ab393ee_96.webp",
+      "themes": ["quality-of-life"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 240
+    },
+    {
+      "project_id": "1bokaNcj",
+      "slug": "xaeros-minimap",
+      "title": "Xaero's Minimap",
+      "description": "Мини-карта в углу экрана с waypoint'ами.",
+      "icon_url": "https://cdn.modrinth.com/data/1bokaNcj/354080f65407e49f486fcf9c4580e82c45ae63b8_96.webp",
+      "themes": ["quality-of-life"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 250
+    },
+    {
+      "project_id": "vRYk0bv7",
+      "slug": "trashslot",
+      "title": "Trash Slot",
+      "description": "Перетаскиваемый слот-корзина на всех экранах инвентаря.",
+      "icon_url": "https://cdn.modrinth.com/data/vRYk0bv7/f700e747710e4d485c79617fe993cc53887a3da6.png",
+      "themes": ["quality-of-life"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 260
+    },
+    {
+      "project_id": "EsAfCjCV",
+      "slug": "appleskin",
+      "title": "AppleSkin",
+      "description": "Показывает точное насыщение и эффекты еды в интерфейсе.",
+      "icon_url": "https://cdn.modrinth.com/data/EsAfCjCV/icon.png",
+      "themes": ["quality-of-life"],
+      "loaders": ["fabric", "forge", "neoforge"],
+      "position": 270
+    },
+    {
+      "project_id": "eJRBmnhz",
+      "slug": "invsee",
+      "title": "InvSee",
+      "description": "Просмотр и редактирование инвентарей других игроков.",
+      "icon_url": "https://cdn.modrinth.com/data/eJRBmnhz/8fa4a7cbe959909fdbb19895e52f7ecab1dbdfca_96.webp",
+      "themes": ["quality-of-life"],
+      "loaders": ["fabric"],
+      "position": 280
+    }
+  ]
+}
