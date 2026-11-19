@@ -10,12 +10,12 @@ Site on c++20 and [Drogon](https://drogon.org/)
 
 ## WebAssembly
 
-Try the standalone WebAssembly noise generator:
+Open the portfolio, WebAssembly noise generator, and MCTools modpack wizard:
 - [Main](https://ninedelixe.github.io/dscmoc/)
 - [Develop](https://ninedelixe.github.io/dscmoc/develop/)
 
 The `main` branch deploys to the root, `develop` to `/develop/`, and tags to `/<tag>/`.
-The modpack wizard still requires Drogon. See the [WASM build and deployment guide](wasm/README.md).
+The Pages build runs in the browser without Drogon. See the [WASM build and deployment guide](wasm/README.md).
 
 
 ## More Details

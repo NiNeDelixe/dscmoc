@@ -1,27 +1,54 @@
 import assert from "node:assert/strict";
 import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
+import { posix } from "node:path";
 
-const views = "backend/projects/NoiseGenerator/views";
+const root = "backend/projects";
 const out = "out/wasm-pages";
-const view = await readFile(`${views}/NoisePageView.html`, "utf8");
-const controls = await readFile(`${views}/NoisePageResources.html`, "utf8");
-const partial = "<%view NoisePageResources.csp%>";
-assert.ok(view.includes(partial), "Noise page no longer includes its controls");
+const home = "HomeSite/views/HomePageView";
+const mc = "MCTools/views";
+const pages = {
+    "/": home,
+    "/about": home,
+    "/contact": home,
+    "/contacts": home,
+    "/projects": home,
+    "/noise": "NoiseGenerator/views/NoisePageView",
+    "/mctools": `${mc}/MCToolsView`,
+    "/mctools/templates": `${mc}/prj_template/prj_template`,
+    "/mctools/packs": `${mc}/packs`,
+    "/mctools/skin_viewer": `${mc}/skin_viewer`,
+    "/mctools/tools": `${mc}/tools`,
+};
 
-const html = view.replace(partial, () => controls)
-    .replace(/ data-noise-endpoint="[^"]+"/, "")
-    .replaceAll('="/static/', '="./static/');
-assert.ok(!html.includes("<%"), "Unresolved Drogon template in the Pages demo");
+async function render(view) {
+    let html = await readFile(`${root}/${view}.html`, "utf8");
+    for (const [tag, name] of html.matchAll(/<%view\s+(\w+)(?:\.csp)?\s*%>/g)) {
+        const dir = name === "header" || name === "footer" ? mc : posix.dirname(view);
+        const fragment = await render(`${dir}/${name}`);
+        html = html.replace(tag, () => fragment);
+    }
+    return html;
+}
 
 await mkdir(out, { recursive: true });
-for (const asset of [
-    "css/noise.css",
-    "images/powered_by_libnoise.svg",
-    "js/browser-tools.js",
-    "js/noise_generator.js",
-    "js/tools-worker.js",
-    "wasm",
-]) {
-    await cp(`static/${asset}`, `${out}/static/${asset}`, { recursive: true });
+for (const dir of ["css", "images", "js", "wasm"]) {
+    await cp(`static/${dir}`, `${out}/static/${dir}`, { recursive: true });
 }
-await writeFile(`${out}/index.html`, html);
+await cp(`${root}/MCTools/data/mods.json`, `${out}/static/mods.json`);
+await cp("static/tools.json", `${out}/static/tools.json`);
+for (const [route, view] of Object.entries(pages)) {
+    const folder = `${out}${route === "/" ? "" : route}`;
+    const base = route === "/" ? "./" : "../".repeat(route.split("/").length - 1);
+    const html = (await render(view))
+        .replace("[[ title ]]", "Конструктор модпака")
+        .replace(/ data-noise-endpoint="[^"]+"/, "")
+        .replace("<body", `<body data-static-site="${base}"`)
+        .replace(/\b(href|src)="(\/[^"/][^"]*|\/)"/g, (tag, attr, url) => {
+            if (url.startsWith("/static/")) return `${attr}="${base}${url.slice(1)}"`;
+            assert.ok(Object.hasOwn(pages, url), `Unknown page link ${url} in ${view}`);
+            return `${attr}="${base}${url === "/" ? "" : url.slice(1) + "/"}"`;
+        });
+    assert.ok(!html.includes("<%") && !html.includes("[["), `Unresolved template in ${view}`);
+    await mkdir(folder, { recursive: true });
+    await writeFile(`${folder}/index.html`, html);
+}

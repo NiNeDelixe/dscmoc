@@ -43,8 +43,10 @@ jobs:
           name: site-wasm
           path: static/wasm/
           if-no-files-found: error
-      - name: Build Pages demo
-        run: node wasm/build-pages.mjs
+      - name: Build static site
+        run: |
+          node wasm/build-pages.mjs
+          node wasm/smoke-pages.mjs
       - uses: actions/upload-artifact@v6
         with:
           name: wasm-pages
@@ -84,7 +86,7 @@ jobs:
             refs/tags/*)
               path="${GITHUB_REF#refs/tags/}"
               case "/$path/" in
-                /develop/*|*/static/*|*/index.html/*)
+                /develop/*|/about/*|/contact/*|/contacts/*|/projects/*|/noise/*|/mctools/*|*/static/*|*/index.html/*)
                   echo "::error::Tag conflicts with a reserved Pages path"
                   exit 1
                   ;;

@@ -1,0 +1,41 @@
+{
+  "tools": [
+    {
+      "id": "templates",
+      "title": "Конструктор модпака",
+      "description": "Подбор модов по Modrinth с фильтром по загрузчику и версии, экспорт в ZIP, .mrpack и проект Pakku.",
+      "url": "/mctools/templates",
+      "icon": "file-text"
+    },
+    {
+      "id": "packs",
+      "title": "Готовые сборки",
+      "description": "Подборки, которые можно скачать и запустить сразу.",
+      "url": "/mctools/packs",
+      "icon": "box"
+    },
+    {
+      "id": "skin_viewer",
+      "title": "Skin Viewer",
+      "description": "Просмотр скинов игроков.",
+      "url": "/mctools/skin_viewer",
+      "icon": "user-round"
+    },
+    {
+      "id": "tools",
+      "title": "Дополнительные инструменты",
+      "description": "Прочие утилиты для работы с модпаками.",
+      "url": "/mctools/tools",
+      "icon": "settings"
+    }
+  ],
+  "additional": [
+    {
+      "id": "tools",
+      "title": "Дополнительные инструменты",
+      "description": "Прочие утилиты для работы с модпаками.",
+      "url": "/mctools/tools",
+      "icon": "settings"
+    }
+  ]
+}

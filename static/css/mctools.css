@@ -108,7 +108,7 @@ select {
     overflow: hidden;
     border-bottom: 1px solid var(--border);
     background: #111a29;
-    background-image: linear-gradient(90deg, #0b1018 0%, #0b1018f0 34%, #0b10188c 63%, #0b101829 100%), url("../images/hero-background.jpg");
+    background-image: linear-gradient(90deg, #0b1018 0%, #0b1018f0 34%, #0b10188c 63%, #0b101829 100%);
     background-size: cover;
     background-position: center
 }

@@ -2,6 +2,7 @@ import { createToolWorker } from "./browser-tools.js";
 
 const api = "/mctools/api/modpack";
 const modrinth = "https://api.modrinth.com/v2";
+const staticSite = Boolean(document.body.dataset.staticSite);
 
 async function json(response, error) {
     const data = await response.json().catch(() => null);
@@ -31,7 +32,8 @@ export async function minecraftVersions(loader) {
                 throw error;
             });
         return await releases;
-    } catch {
+    } catch (error) {
+        if (staticSite) throw error;
         return (await json(await post("/versions/mc", { loader }), "Не удалось получить версии Minecraft")).versions;
     }
 }
@@ -41,7 +43,8 @@ export async function loaderVersions(loader, mc_version) {
     try {
         const versions = await upstream(`https://meta.fabricmc.net/v2/versions/loader/${encodeURIComponent(mc_version)}`);
         return versions.map(({ loader }) => ({ version: loader.version, is_stable: loader.stable }));
-    } catch {
+    } catch (error) {
+        if (staticSite) throw error;
         return (await json(await post("/versions/loaders", { loader, mc_version }), "Не удалось получить версии загрузчика")).versions;
     }
 }
@@ -52,12 +55,50 @@ export async function findMods(query, loader, mc_version) {
     try {
         const { hits } = await upstream(`${modrinth}/search?${new URLSearchParams({ query, facets, limit })}`);
         return hits.filter((hit) => hit.project_id).map((hit) => ({ ...hit, id: hit.project_id }));
-    } catch {
+    } catch (error) {
+        if (staticSite) throw error;
         return (await json(await post("/mods/search", { query, loader, mc_version, limit }), "Ошибка поиска")).mods;
     }
 }
 
+let catalog;
+export async function listCatalog(themes, loader) {
+    if (!staticSite) {
+        return (await json(await post("/catalog", { themes, loader }), "Не удалось загрузить каталог")).mods;
+    }
+    catalog ??= upstream(new URL("../mods.json", import.meta.url)).catch((error) => {
+        catalog = undefined;
+        throw error;
+    });
+    const { mods } = await catalog;
+    return mods.filter((mod) => mod.project_id && mod.loaders.includes(loader) &&
+            (!themes.length || themes.some((theme) => mod.themes.includes(theme))))
+        .sort((a, b) => (a.position ?? 1000) - (b.position ?? 1000))
+        .map((mod) => ({ ...mod, id: mod.project_id }));
+}
+
+async function makeArchive(worker, plan) {
+    const bytes = await worker.run("archive", plan);
+    return { blob: new Blob([bytes], { type: "application/zip" }), filename: plan.filename,
+        skipped: plan.warnings.join("; "), local: true };
+}
+
 export async function exportPack(request, onFallback) {
+    if (staticSite) {
+        const worker = createToolWorker();
+        try {
+            const { preparePack } = await import("./modpack-plan.js");
+            const plan = await preparePack(request, (id, loader, mcVersion) => {
+                const params = new URLSearchParams({
+                    loaders: JSON.stringify([loader]), game_versions: JSON.stringify([mcVersion]),
+                });
+                return upstream(`${modrinth}/project/${encodeURIComponent(id)}/version?${params}`);
+            });
+            return await makeArchive(worker, plan);
+        } finally {
+            worker.close();
+        }
+    }
     let worker;
     try {
         worker = createToolWorker();
@@ -68,9 +109,7 @@ export async function exportPack(request, onFallback) {
         try {
             const plan = await json(await post("/export?prepare=1", request), "Не удалось подготовить сборку");
             try {
-                const bytes = await worker.run("archive", plan);
-                return { blob: new Blob([bytes], { type: "application/zip" }), filename: plan.filename,
-                    skipped: plan.warnings.join("; "), local: true };
+                return await makeArchive(worker, plan);
             } catch {
                 // Retry the failed browser build on the server.
             }

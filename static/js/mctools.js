@@ -18,7 +18,8 @@
         if (!homeGrid && !extraGrid) return;
 
         try {
-            const r = await fetch("/mctools/api/tools");
+            const base = document.body.dataset.staticSite;
+            const r = await fetch(base ? `${base}static/tools.json` : "/mctools/api/tools");
             if (!r.ok) throw Error(r.status);
             const data = await r.json();
             const all = data.tools || [];
@@ -43,7 +44,7 @@
 
                     const link = document.createElement("a");
                     link.className = "button";
-                    link.href = x.url || "#";
+                    link.href = base ? `${base}${x.url.slice(1)}/` : x.url;
                     link.textContent = "Перейти";
 
                     a.append(i, h, p, link);
@@ -274,17 +275,11 @@
             if (status) status.textContent = "Загружаем каталог...";
 
             try {
-                const r = await fetch("/mctools/api/modpack/catalog", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ themes: themes(), loader: loader() }),
-                });
-
-                const data = await r.json().catch(() => ({}));
+                const { listCatalog } = await import("./modpack-client.js");
+                const mods = await listCatalog(themes(), loader());
                 if (requestId !== catalogRequest) return;
-                if (!r.ok) throw new Error(data.error || "Не удалось загрузить каталог");
 
-                catalog = data.mods || [];
+                catalog = mods;
                 applyCatalogFilter();
 
                 if (status) {
